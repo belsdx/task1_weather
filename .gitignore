@@ -1,0 +1,60 @@
+# ==========================================
+# 1. Gradle 自动化构建工具缓存与产物
+# ==========================================
+.gradle/
+build/
+**/build/
+*.gradle.gnuplot
+
+# ==========================================
+# 2. Android Studio / IntelliJ IDEA 编译器配置
+# ==========================================
+.idea/
+*.iml
+*.ipr
+*.iws
+local.properties
+.navigation/
+captures/
+.cxx/
+*.apk
+*.aar
+*.jar
+
+# ==========================================
+# 3. iOS / Xcode 平台特有缓存与本地配置
+# ==========================================
+**/iosApp.xcworkspace/xcuserdata/
+**/iosApp.xcodeproj/project.xcworkspace/
+**/iosApp.xcodeproj/xcuserdata/
+.mtj.tmp/
+*.xcworkspace/
+DerivedData/
+Pods/
+.pnpm-debug.log
+
+# ==========================================
+# 4. Kotlin Multiplatform 编译器及 Web (JS/Wasm) 依赖
+# ==========================================
+.kotlin/
+node_modules/
+kotlin-js-store/
+.pnpm-store/
+
+# ==========================================
+# 5. 操作系统自动生成的干扰文件
+# ==========================================
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
