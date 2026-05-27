@@ -76,3 +76,12 @@ jobs:
 
       - name: Compile iOS Framework
         run: ./gradlew linkDebugFrameworkIosX64 || ./gradlew iosX64MainBinaries || echo "No iOS task"
+
+      # ✅ 补全：上传 iOS 构建产物（符合文档“所有平台创建 artifacts”要求）
+      - name: Upload iOS Framework Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-framework
+          path: '**/build/bin/ios*/**/*.framework'
+          retention-days: 7
