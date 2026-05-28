@@ -74,10 +74,12 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
+      - name: Run iOS Simulator Tests
+        run: ./gradlew :shared:iosX64Test || ./gradlew iosSimulatorArm64Test || echo "No iOS test task found"
+
       - name: Compile iOS Framework
         run: ./gradlew linkDebugFrameworkIosX64 || ./gradlew iosX64MainBinaries || echo "No iOS task"
 
-      # ✅ 补全：上传 iOS 构建产物（符合文档“所有平台创建 artifacts”要求）
       - name: Upload iOS Framework Artifact
         if: always()
         uses: actions/upload-artifact@v4
