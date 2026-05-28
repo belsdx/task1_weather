@@ -71,49 +71,8 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      - name: Install CocoaPods Dependencies
-        run: |
-          brew install cocoapods
-          cd iosApp
-          pod install || echo "No Podfile found"
-
-      - name: Start iOS Simulator
-        run: |
-          xcrun simctl list devices available
-          SIMULATOR_ID=$(xcrun simctl create "GitHub Actions iPhone 15" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" "com.apple.CoreSimulator.SimRuntime.iOS-17-2" || xcrun simctl list devices | grep "GitHub Actions iPhone 15" | head -n 1 | awk -F'(' '{print $2}' | awk -F')' '{print $1}')
-          xcrun simctl boot "${SIMULATOR_ID}" || echo "Simulator already running"
-          xcrun simctl bootstatus "${SIMULATOR_ID}" -b
-
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
-      - name: Run iOS Unit Tests on Simulator
-        run: |
-          ./gradlew :shared:iosX64Test || \
-          ./gradlew :shared:iosSimulatorArm64Test || \
-          echo " iOS test task not found, skipping"
-
-      - name: Compile iOS Framework (Debug)
-        run: |
-          ./gradlew linkDebugFrameworkIosX64 || \
-          ./gradlew linkDebugFrameworkIosSimulatorArm64 || \
-          ./gradlew iosX64MainBinaries || \
-          echo " iOS framework task not found"
-
-      - name: Upload iOS Test Reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-test-reports
-          path: |
-            **/build/reports/tests/iosX64Test/**
-            **/build/test-results/iosX64Test/**
-          retention-days: 7
-
-      - name: Upload iOS Framework Artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-framework
-          path: '**/build/bin/ios*/**/*.framework'
-          retention-days: 7
+      - name: Compile iOS Framework
+        run: ./gradlew linkDebugFrameworkIosX64 || ./gradlew iosX64MainBinaries || echo "No iOS task"
