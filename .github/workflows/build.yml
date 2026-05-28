@@ -71,23 +71,17 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      - name: Select Xcode Version
-        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
-
-
       - name: Install CocoaPods Dependencies
         run: |
-          sudo gem install cocoapods
+          brew install cocoapods
           cd iosApp
           pod install || echo "No Podfile found"
 
       - name: Start iOS Simulator
         run: |
           xcrun simctl list devices available
-
-          SIMULATOR_ID=$(xcrun simctl create "GitHub Actions iPhone 15" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" "com.apple.CoreSimulator.SimRuntime.iOS-17-2")
+          SIMULATOR_ID=$(xcrun simctl create "GitHub Actions iPhone 15" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" "com.apple.CoreSimulator.SimRuntime.iOS-17-2" || xcrun simctl list devices | grep "GitHub Actions iPhone 15" | head -n 1 | awk -F'(' '{print $2}' | awk -F')' '{print $1}')
           xcrun simctl boot "${SIMULATOR_ID}" || echo "Simulator already running"
-
           xcrun simctl bootstatus "${SIMULATOR_ID}" -b
 
       - name: Change wrapper permissions
